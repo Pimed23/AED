@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+void saveList( QString name, videoListType *videoList );
+
 MainWindow::MainWindow(QWidget *parent, videoListType *vidListPtr ) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -24,6 +26,7 @@ MainWindow::MainWindow(QWidget *parent, videoListType *vidListPtr ) :
 
 MainWindow::~MainWindow()
 {
+    saveList( "C:/Users/Horo/Documents/Qt/TiendaFinal/datosVideo", videosLista );
     delete ui;
 }
 
@@ -73,4 +76,51 @@ void MainWindow::on_pushDevolver_clicked()
 {
     devolverVentana->setVisible( true );
     this->setVisible( false );
+}
+
+void saveList( QString name, videoListType *videoList ) {
+    QFile file;
+    file.setFileName( name );
+
+    QByteArray title;
+    QByteArray star1;
+    QByteArray star2;
+    QByteArray producer;
+    QByteArray director;
+    QByteArray productionCo;
+    QByteArray inStock;
+    if( !file.exists())
+        qDebug() << "Ej archivo no existe";
+
+    file.open( QIODevice::WriteOnly | QIODevice::Text );
+    if( !file.isOpen())
+        qDebug() << "El archivo no se abrio";
+
+    linkedListIterator<videoType> it = videoList->begin();
+    while(it != videoList->end()) {
+        title = (*it).getTitle().toUtf8();
+        file.write( title );
+        file.write("\n");
+        star1 = (*it).getStar1().toUtf8();
+        file.write( star1 );
+        file.write("\n");
+        star2 = (*it).getStar2().toUtf8();
+        file.write( star2 );
+        file.write("\n");
+        producer = (*it).getProductor().toUtf8();
+        file.write( producer );
+        file.write("\n");
+        director = (*it).getDirector().toUtf8();
+        file.write( director );
+        file.write("\n");
+        productionCo = (*it).getProductionCo().toUtf8();
+        file.write( productionCo );
+        file.write("\n");
+        inStock = QString::number((*it).getNoOfCopiesInStock()).toUtf8();
+        file.write( inStock );
+        file.write("\n");
+
+        ++it;
+    }
+    file.close();
 }

@@ -8,11 +8,10 @@ void createList(QString fileName, videoListType *vl);
 int main(int argc, char *argv[])
 {
     videoListType *videosData = new videoListType;
-    createList( "C:/Users/Horo/Documents/Qt/VideoStore/datVideo", videosData );
+    createList( "C:/Users/Horo/Documents/Qt/TiendaFinal/datosVideo", videosData );
     QApplication a(argc, argv);
     MainWindow w( nullptr, videosData );
     w.show();
-
     return a.exec();
 }
 

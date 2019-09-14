@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QFile>
 #include "videolisttype.h"
 #include "buscar.h"
 #include "database.h"
@@ -9,6 +10,7 @@
 #include "stock.h"
 #include "rentar.h"
 #include "devolver.h"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
