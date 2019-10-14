@@ -1,22 +1,23 @@
-#ifndef SINGLYLINKEDLIST_H
-#define SINGLYLINKEDLIST_H
+#ifndef DOUBLYLINKEDLIST_H
+#define DOUBLYLINKEDLIST_H
 
 #include <iostream>
 
 ////////////////////////////////////////////////////////////////////
-////////            CLASS SINGLY LINKED LIST             ///////////
+////////            CLASS DOUBLY LINKED LIST             ///////////
 ////////////////////////////////////////////////////////////////////
 
 template < typename Type >
-class SinglyLinkedList {
+class DoublyLinkedList {
     private:
         struct Node { 
             Type data;
             Node* next;
+            Node* prev;
             
             Node();
-            Node( const Type &data, Node *n = NULL );
-            Node( Type &&data, Node *n = NULL );
+            Node( const Type &data, Node *n = NULL, Node *p = NULL );
+            Node( Type &&data, Node *n = NULL, Node *p = NULL );
         };
     
     public:
@@ -28,6 +29,9 @@ class SinglyLinkedList {
                 const_Iterator& operator++();
                 const_Iterator& operator+( int n );
                 const_Iterator operator++( int );
+                const_Iterator& operator--();
+                const_Iterator& operator-( int n );
+                const_Iterator operator--( int );
                 bool operator==( const const_Iterator &rhs ) const;
                 bool operator!=( const const_Iterator &rhs ) const;
 
@@ -36,7 +40,7 @@ class SinglyLinkedList {
                 Type& retrieveData() const;
                 const_Iterator( Node *p ) : current( p ) {} 
 
-            friend class SinglyLinkedList<Type>;
+            friend class DoublyLinkedList<Type>;
         };
 
         class Iterator : public const_Iterator {
@@ -47,24 +51,27 @@ class SinglyLinkedList {
                 const Type& operator*() const;
                 Iterator& operator++();
                 Iterator operator++( int );
+                Iterator& operator--();
+                Iterator operator--( int );
 
             protected:
                 Iterator( Node *p ) : const_Iterator( p ) {}
 
-            friend class SinglyLinkedList<Type>;
+            friend class DoublyLinkedList<Type>;
         };
 
     public:
-        SinglyLinkedList();
-        SinglyLinkedList( const SinglyLinkedList &otherList );
-        SinglyLinkedList( SinglyLinkedList &&rhs );
-        ~SinglyLinkedList();
+        DoublyLinkedList();
+        DoublyLinkedList( const DoublyLinkedList &otherList );
+        DoublyLinkedList( DoublyLinkedList &&rhs );
+        ~DoublyLinkedList();
 
         void clearList();
         void pushFront( const Type &data );
         void pushBack( const Type &data );
         void pushPosition( const Type &data, int pos );
-        void printList();
+        void printFList();
+        void printBList();
         void deleteFront();
         void deleteBack();
         void deletePosition( int pos );
@@ -85,7 +92,7 @@ class SinglyLinkedList {
         Node *last = NULL;
 
         void initList();
-        void copyList( SinglyLinkedList &otherList );
+        void copyList( DoublyLinkedList &otherList );
 };
 
 ////////////////////////////////////////////////////////////////////
@@ -94,21 +101,23 @@ class SinglyLinkedList {
 
 // Default Constructor
 template < typename Type >
-SinglyLinkedList<Type>::Node::Node() {
+DoublyLinkedList<Type>::Node::Node() {
 }
 
 // Parameters Constructor
 template < typename Type >
-SinglyLinkedList<Type>::Node::Node( const Type &data, Node *n ) {
+DoublyLinkedList<Type>::Node::Node( const Type &data, Node *n, Node *p ) {
     this -> data = data;
     this -> next = n;
+    this -> prev = p;
 }
 
 // Move Constructor
 template < typename Type >
-SinglyLinkedList<Type>::Node::Node( Type &&data, Node *n ) {
+DoublyLinkedList<Type>::Node::Node( Type &&data, Node *n, Node *p ) {
     this -> data = std::move( data );
     this -> next = n;
+    this -> prev = p;
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -117,32 +126,32 @@ SinglyLinkedList<Type>::Node::Node( Type &&data, Node *n ) {
 
 // Default constructor
 template < typename Type >
-SinglyLinkedList<Type>::const_Iterator::const_Iterator() {
+DoublyLinkedList<Type>::const_Iterator::const_Iterator() {
     current = NULL;
 }
 
 // Retrieve Data
 template < typename Type >
-const Type& SinglyLinkedList<Type>::const_Iterator::operator*() const {
+const Type& DoublyLinkedList<Type>::const_Iterator::operator*() const {
     return this -> retrieveData();
 }
 
 // Operator *
 template < typename Type >
-Type& SinglyLinkedList<Type>::const_Iterator::retrieveData() const {
+Type& DoublyLinkedList<Type>::const_Iterator::retrieveData() const {
     return current -> data;
 }
 
 // Operator ++ Pre - Increment
 template < typename Type >
-typename SinglyLinkedList<Type>::const_Iterator& SinglyLinkedList<Type>::const_Iterator::operator++() {
+typename DoublyLinkedList<Type>::const_Iterator& DoublyLinkedList<Type>::const_Iterator::operator++() {
     current = current -> next;
     return *this;
 }
 
 // Operator + Increment
 template < typename Type >
-typename SinglyLinkedList<Type>::const_Iterator& SinglyLinkedList<Type>::const_Iterator::operator+( int n ) {
+typename DoublyLinkedList<Type>::const_Iterator& DoublyLinkedList<Type>::const_Iterator::operator+( int n ) {
     const_Iterator *pos = this;
     for( int i = 0; i < n; ++i )
         pos -> current = pos -> current -> next;
@@ -151,21 +160,45 @@ typename SinglyLinkedList<Type>::const_Iterator& SinglyLinkedList<Type>::const_I
 
 // Operator ++ Post - Increment
 template < typename Type >
-typename SinglyLinkedList<Type>::const_Iterator SinglyLinkedList<Type>::const_Iterator::operator++( int ) {
+typename DoublyLinkedList<Type>::const_Iterator DoublyLinkedList<Type>::const_Iterator::operator++( int ) {
     const_Iterator old = *this;
     ++( *this );
     return old;
 }
 
+// Operator -- Pre - Decrement
+template < typename Type >
+typename DoublyLinkedList<Type>::const_Iterator& DoublyLinkedList<Type>::const_Iterator::operator--() {
+    current = current -> prev;
+    return *this;
+}
+
+// Operator - Decrement
+template < typename Type >
+typename DoublyLinkedList<Type>::const_Iterator& DoublyLinkedList<Type>::const_Iterator::operator-( int n ) {
+    const_Iterator *pos = this;
+    for( int i = 0; i < n; ++i )
+        pos -> current = pos -> current -> prev;
+    return *pos;
+}
+
+// Operator -- Post - Decrement
+template < typename Type >
+typename DoublyLinkedList<Type>::const_Iterator DoublyLinkedList<Type>::const_Iterator::operator--( int ) {
+    const_Iterator old = *this;
+    --( *this );
+    return old;
+}
+
 // Operator == 
 template < typename Type >
-bool SinglyLinkedList<Type>::const_Iterator::operator==( const const_Iterator &rhs ) const {
+bool DoublyLinkedList<Type>::const_Iterator::operator==( const const_Iterator &rhs ) const {
     return current == rhs.current;
 }
 
 // Operator != 
 template < typename Type >
-bool SinglyLinkedList<Type>::const_Iterator::operator!=( const const_Iterator &rhs ) const {
+bool DoublyLinkedList<Type>::const_Iterator::operator!=( const const_Iterator &rhs ) const {
     return !( *this == rhs );
 }
 
@@ -176,66 +209,81 @@ bool SinglyLinkedList<Type>::const_Iterator::operator!=( const const_Iterator &r
 
 // Operator *
 template < typename Type >
-Type& SinglyLinkedList<Type>::Iterator::operator*() {
-    return SinglyLinkedList<Type>::const_Iterator::retrieveData();
+Type& DoublyLinkedList<Type>::Iterator::operator*() {
+    return DoublyLinkedList<Type>::const_Iterator::retrieveData();
 }
 
 // Operator * const
 template < typename Type >
-const Type& SinglyLinkedList<Type>::Iterator::operator*() const {
-    return SinglyLinkedList<Type>::const_Iterator::operator*();
+const Type& DoublyLinkedList<Type>::Iterator::operator*() const {
+    return DoublyLinkedList<Type>::const_Iterator::operator*();
 }
 
 // Operator ++ Pre - Increment
 template < typename Type >
-typename SinglyLinkedList<Type>::Iterator& SinglyLinkedList<Type>::Iterator::operator++() {
-    SinglyLinkedList<Type>::const_Iterator::current = SinglyLinkedList<Type>::const_Iterator::current -> next;
+typename DoublyLinkedList<Type>::Iterator& DoublyLinkedList<Type>::Iterator::operator++() {
+    DoublyLinkedList<Type>::const_Iterator::current = DoublyLinkedList<Type>::const_Iterator::current -> next;
     return *this;
 }
 
 // Operator ++ Post - Increment
 template < typename Type >
-typename SinglyLinkedList<Type>::Iterator SinglyLinkedList<Type>::Iterator::operator++( int ) {
+typename DoublyLinkedList<Type>::Iterator DoublyLinkedList<Type>::Iterator::operator++( int ) {
     Iterator& old = *this;
     ++( *this );
     return old;
 }
 
+// Operator -- Pre - Decrement
+template < typename Type >
+typename DoublyLinkedList<Type>::Iterator& DoublyLinkedList<Type>::Iterator::operator--() {
+    DoublyLinkedList<Type>::const_Iterator::current = DoublyLinkedList<Type>::const_Iterator::current -> prev;
+    return *this;
+}
+
+// Operator -- Post - Decrement
+template < typename Type >
+typename DoublyLinkedList<Type>::Iterator DoublyLinkedList<Type>::Iterator::operator--( int ) {
+    Iterator& old = *this;
+    --( *this );
+    return old;
+}
+
 ////////////////////////////////////////////////////////////////////
-////////            CLASS SINGLY LINKED LIST             ///////////
+////////            CLASS DOUBLY LINKED LIST             ///////////
 ////////////////////////////////////////////////////////////////////
 
 // Default Constructor
 template < typename Type >
-SinglyLinkedList<Type>::SinglyLinkedList() {    
+DoublyLinkedList<Type>::DoublyLinkedList() {    
     this -> initList();
 }
 
 // Init Linked List
 template < typename Type >
-void SinglyLinkedList<Type>::initList() {
+void DoublyLinkedList<Type>::initList() {
     size = 0;
     head = new Node;
 }
 
 // Copy Constructor
 template < typename Type >
-SinglyLinkedList<Type>::SinglyLinkedList( const SinglyLinkedList &otherList ) {
+DoublyLinkedList<Type>::DoublyLinkedList( const DoublyLinkedList &otherList ) {
     this -> initList();
     for( auto &x : otherList )
         this -> pushBack( x );
-    this -> pushBack(*( otherList.end()));
+    this -> pushBack( *( otherList.end()));
 }
 
 // Default Destructor
 template < typename Type >
-SinglyLinkedList<Type>::~SinglyLinkedList() {
+DoublyLinkedList<Type>::~DoublyLinkedList() {
     this -> clearList();
 }
 
 // Destroy Linked List
 template < typename Type >
-void SinglyLinkedList<Type>::clearList() {
+void DoublyLinkedList<Type>::clearList() {
     Node *temp;
     while( head != NULL ) {
         temp = head;
@@ -248,12 +296,13 @@ void SinglyLinkedList<Type>::clearList() {
 
 // Insert a node at the end
 template < typename Type >
-void SinglyLinkedList<Type>::pushBack( const Type &data ) {
+void DoublyLinkedList<Type>::pushBack( const Type &data ) {
     if( last == NULL ) {
         head -> data = data;
         last = head;
     } else {
         Node *newNode = new Node( data );
+        newNode -> prev = last;
         last -> next = newNode;
         last = newNode;
     }
@@ -262,13 +311,14 @@ void SinglyLinkedList<Type>::pushBack( const Type &data ) {
 
 // Insert a node at the front
 template < typename Type >
-void SinglyLinkedList<Type>::pushFront( const Type &data ) {
+void DoublyLinkedList<Type>::pushFront( const Type &data ) {
     if( last == NULL ) {
         head -> data = data;
         last = head;
     } else {
         Node *newNode = new Node( data );
         newNode -> next = head;
+        head -> prev = newNode;
         head = newNode;
     }
     ++size;
@@ -276,7 +326,7 @@ void SinglyLinkedList<Type>::pushFront( const Type &data ) {
 
 // Insert a node in a position
 template < typename Type >
-void SinglyLinkedList<Type>::pushPosition( const Type &data, int pos ) {
+void DoublyLinkedList<Type>::pushPosition( const Type &data, int pos ) {
     if( pos < 0 || pos >= size )
         std::cout << "Out of range..." << std::endl;
     else if( pos > 0 && pos < size ) {      
@@ -285,6 +335,8 @@ void SinglyLinkedList<Type>::pushPosition( const Type &data, int pos ) {
         for( int i = 1; i < pos; ++i )
             temp = temp -> next;
         newNode -> next = temp -> next;
+        newNode -> prev = temp;
+        temp -> next -> prev = newNode;
         temp -> next = newNode;
         ++size;
     } else if( pos == 0 )
@@ -293,7 +345,7 @@ void SinglyLinkedList<Type>::pushPosition( const Type &data, int pos ) {
 
 // Delete a node at the front
 template < typename Type >
-void SinglyLinkedList<Type>::deleteFront() {
+void DoublyLinkedList<Type>::deleteFront() {
     Node *temp = head;
     head = head -> next;
     delete temp;
@@ -302,27 +354,26 @@ void SinglyLinkedList<Type>::deleteFront() {
 
 // Delete a node at the back
 template < typename Type >
-void SinglyLinkedList<Type>::deleteBack() {
-    Node *temp = head;
-    while( temp -> next != last )
-        temp = temp -> next;
-    delete last;
-    last = temp;
+void DoublyLinkedList<Type>::deleteBack() {
+    Node *temp = last;
+    last = last -> prev;
+    delete temp;
     --size;
 }
 
 // Delete a node in a position
 template < typename Type >
-void SinglyLinkedList<Type>::deletePosition( int pos ) {
+void DoublyLinkedList<Type>::deletePosition( int pos ) {
     if( pos < 0 || pos >= size )
         std::cout << "Out of range..." << std::endl;
     else if( pos > 0 && pos < size - 1 ) {      
-        Node *prev = head;
+        Node *ante = head;
         Node *temp;
         for( int i = 1; i < pos; ++i )
-            prev = prev -> next;
-        temp = prev -> next;
-        prev -> next = temp -> next;
+            ante = ante -> next;
+        temp = ante -> next;
+        ante -> next = temp -> next;
+        temp -> next -> prev = ante;
         delete temp;      
         --size;
     } else if( pos == 0 )
@@ -333,53 +384,62 @@ void SinglyLinkedList<Type>::deletePosition( int pos ) {
 
 // Print all the elements in the list
 template < typename Type >
-void SinglyLinkedList<Type>::printList() {
-    SinglyLinkedList<Type>::Iterator it = this -> begin();
+void DoublyLinkedList<Type>::printFList() {
+    DoublyLinkedList<Type>::Iterator it = this -> begin();
     for( ; it != this -> end(); ++it )
+        std::cout << *it << " ";
+    std::cout << *it << std::endl;
+}
+
+// Print all the elements in reverse
+template < typename Type >
+void DoublyLinkedList<Type>::printBList() {
+    DoublyLinkedList<Type>::Iterator it = this -> end();
+    for( ; it != this -> begin(); --it )
         std::cout << *it << " ";
     std::cout << *it << std::endl;
 }
 
 // Get the size of the list
 template < typename Type >
-int SinglyLinkedList<Type>::getSize() const {
+int DoublyLinkedList<Type>::getSize() const {
     return size;
 }
 
 
 // backElement: Return the last element in the list
 template < typename Type >
-Type& SinglyLinkedList<Type>::backElement() { 
+Type& DoublyLinkedList<Type>::backElement() { 
     return *end(); 
 }
 
 // frontElement: Return the first element in the list
 template < typename Type >
-Type& SinglyLinkedList<Type>::frontElement() {
+Type& DoublyLinkedList<Type>::frontElement() {
     return *begin();
 }
 
 // const_Iterator begin
 template < typename Type >
-typename SinglyLinkedList<Type>::const_Iterator SinglyLinkedList<Type>::begin() const {
+typename DoublyLinkedList<Type>::const_Iterator DoublyLinkedList<Type>::begin() const {
     return head;
 }
 
 // const_Iterator end
 template < typename Type >
-typename SinglyLinkedList<Type>::const_Iterator SinglyLinkedList<Type>::end() const {
+typename DoublyLinkedList<Type>::const_Iterator DoublyLinkedList<Type>::end() const {
     return last;
 }
 
 // Iterator begin
 template < typename Type >
-typename SinglyLinkedList<Type>::Iterator SinglyLinkedList<Type>::begin() {
+typename DoublyLinkedList<Type>::Iterator DoublyLinkedList<Type>::begin() {
     return head;
 }
 
 // Iterator end
 template < typename Type >
-typename SinglyLinkedList<Type>::Iterator SinglyLinkedList<Type>::end() {
+typename DoublyLinkedList<Type>::Iterator DoublyLinkedList<Type>::end() {
     return last;
 }
 
