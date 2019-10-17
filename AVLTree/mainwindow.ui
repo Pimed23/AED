@@ -156,7 +156,7 @@
             </spacer>
            </item>
            <item>
-            <widget class="QLabel" name="label">
+            <widget class="QLabel" name="labelImage">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
                <horstretch>0</horstretch>
@@ -165,9 +165,6 @@
              </property>
              <property name="text">
               <string/>
-             </property>
-             <property name="pixmap">
-              <pixmap>../build-AVLTree-Desktop_Qt_5_12_5_GCC_64bit-Debug/Hola.png</pixmap>
              </property>
              <property name="scaledContents">
               <bool>true</bool>

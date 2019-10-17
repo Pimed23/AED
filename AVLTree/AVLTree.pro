@@ -17,12 +17,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    utilities.cpp
 
 HEADERS += \
     AVL.h \
-    Utilities.h \
-    mainwindow.h
+    mainwindow.h \
+    utilities.h
 
 FORMS += \
     mainwindow.ui
@@ -33,6 +34,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
-    Hola.txt
+    Tree.txt
 
 RESOURCES +=

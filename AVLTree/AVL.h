@@ -16,6 +16,7 @@ class AVLTree {
         void insert( const Type &x );
         void insert( Type &&x );
         void remove( const Type &x );
+        void generarTxt(std::string& txt )const;
 
         const Type& findMin() const;
         const Type& findMax() const;
@@ -49,6 +50,7 @@ class AVLTree {
         void rotateWithLeftChild( AVLNode *&k2 );
         void doubleWithLeftChild( AVLNode *&k3 );
         void doubleWithRightChild( AVLNode *&k4 );
+        void generarTxt( AVLNode *T , std::string &txt ) const;
 
         AVLNode* clone( AVLNode *T ) const;
         AVLNode* findMin( AVLNode *T ) const;
@@ -137,6 +139,11 @@ void AVLTree<Type>::insert( Type &&x ) {
 template < typename Type >
 void AVLTree<Type>::remove( const Type &x ) {
     remove( x, root );
+}
+
+template < typename Type >
+void AVLTree<Type>::generarTxt( std::string &txt ) const {
+    generarTxt( root,txt);
 }
 
 // Find the smallest item in the tree
@@ -306,6 +313,45 @@ template < typename Type >
 void AVLTree<Type>::doubleWithRightChild( AVLNode *&k4 ) {
     rotateWithLeftChild( k4 -> right );
     rotateWithRightChild( k4 );
+}
+
+// Convert tree in dot txt
+template < typename Type >
+void AVLTree<Type>::generarTxt( AVLTree<Type>::AVLNode *T, std::string &txt ) const {
+    if( T != NULL ){
+        if( height( root ) == 0 ) {
+            txt.append("\"");
+            txt.append(std::to_string(T->data));
+            txt.append("\"");
+            txt.append(" -> ");
+            txt.append("\"");
+            txt.append("NULL");
+            txt.append("\"");
+            txt.append("\n");
+        }
+        if( T -> left != NULL ){
+            txt.append("\"");
+            txt.append( std::to_string( T -> data ));
+            txt.append("\"");
+            txt.append(" -> ");
+            txt.append("\"");
+            txt.append( std::to_string( T -> left -> data ));
+            txt.append("\"");
+            txt.append("\n");
+        }
+        generarTxt( T -> left, txt );
+        if( T -> right != NULL ){
+            txt.append("\"");
+            txt.append( std::to_string( T -> data ));
+            txt.append("\"");
+            txt.append(" -> ");
+            txt.append("\"");
+            txt.append( std::to_string( T -> right -> data ));
+            txt.append("\"");
+            txt.append("\n");
+        }
+        generarTxt( T -> right, txt );
+    }
 }
 
 

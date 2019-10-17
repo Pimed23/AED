@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "AVL.h"
+#include "utilities.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -15,11 +15,10 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    AVLTree<int> *avl;
+    AVLTree<int> *avl;   
 
 private slots:
     void on_ins_clicked();
-
     void on_del_clicked();
 
 private:
