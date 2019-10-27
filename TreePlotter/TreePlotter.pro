@@ -21,8 +21,8 @@ SOURCES += \
     utilities.cpp
 
 HEADERS += \
-    AVL.h \
-    RB_Tree.h \
+    AVLTree.h \
+    RBTree.h \
     mainwindow.h \
     utilities.h
 
@@ -33,7 +33,3 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
-
-DISTFILES +=
-
-RESOURCES +=

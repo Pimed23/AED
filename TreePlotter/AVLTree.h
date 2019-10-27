@@ -424,6 +424,4 @@ int AVLTree<Type>::max( int lhs, int rhs ) const {
 }
 
 
-
-
 #endif // AVL_H
