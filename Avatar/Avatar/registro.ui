@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>registro</class>
+ <widget class="QDialog" name="registro">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QLabel" name="title">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>10</y>
+     <width>161</width>
+     <height>18</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Registro de Cuenta</string>
+   </property>
+  </widget>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>40</y>
+     <width>308</width>
+     <height>241</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout_3">
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="QLabel" name="nombreLabel">
+          <property name="text">
+           <string>Nombre:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="apellidoLabel">
+          <property name="text">
+           <string>Apellidos:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="dniLabel">
+          <property name="text">
+           <string>DNI:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="edadLabel">
+          <property name="text">
+           <string>Edad</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="sexoLabel">
+          <property name="text">
+           <string>Sexo:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="correoLabel">
+          <property name="text">
+           <string>Correo:</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="QLineEdit" name="nombreContaint"/>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="apellidoContaint"/>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="dniContaint"/>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="edadContaint"/>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <widget class="QRadioButton" name="hombreRadio">
+            <property name="text">
+             <string>Hombre</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="mujerRadio">
+            <property name="text">
+             <string>Mujer</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="correoContaint"/>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="backPush">
+        <property name="text">
+         <string>Volver</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="registerPush">
+        <property name="text">
+         <string>Registrar</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_3">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
