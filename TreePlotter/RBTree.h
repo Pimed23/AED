@@ -242,7 +242,7 @@ void RBTree<Type>::insert_fixup( RBTree<Type>::RBNode *z ) {
                 uncle -> color = 'B';
                 grandfather -> color = 'R';
                 z = grandfather;
-            } else if( z == grandfather ) {
+            } else if( z == z -> parent -> right ) {
                 z = z -> parent;
                 rotateLeft( z );
             } else {
@@ -257,7 +257,7 @@ void RBTree<Type>::insert_fixup( RBTree<Type>::RBNode *z ) {
                 uncle -> color = 'B';
                 grandfather -> color = 'R';
                 z = grandfather;
-            } else if( z == grandfather ) {
+            } else if( z == z -> parent -> left ) {
                 z = z -> parent;
                 rotateRight( z );
             } else {
