@@ -1,12 +1,10 @@
-#include "login.h"
-
+#include "plooter.h"
 #include <QApplication>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    Login w;
-    w.setGeometry( 500, 300, 400, 275 ); // Posicion ventana inicial
+    Plooter w;
     w.show();
     return a.exec();
 }

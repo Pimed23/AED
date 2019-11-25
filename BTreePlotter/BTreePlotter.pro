@@ -16,46 +16,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    accesories.cpp \
-    body.cpp \
-    createavatar.cpp \
-    foots.cpp \
-    hands.cpp \
-    head.cpp \
-    legs.cpp \
     main.cpp \
-    login.cpp \
-    persona.cpp \
-    profile.cpp \
-    registeravatar.cpp \
-    registro.cpp
+    plooter.cpp
 
 HEADERS += \
-    accesories.h \
-    body.h \
-    createavatar.h \
-    foots.h \
-    hands.h \
-    head.h \
-    legs.h \
-    login.h \
-    persona.h \
-    profile.h \
-    registeravatar.h \
-    registro.h
+    BTree.h \
+    plooter.h
 
 FORMS += \
-    accesories.ui \
-    body.ui \
-    createavatar.ui \
-    foots.ui \
-    hands.ui \
-    head.ui \
-    legs.ui \
-    login.ui \
-    profile.ui \
-    registeravatar.ui \
-    registro.ui
+    plooter.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
