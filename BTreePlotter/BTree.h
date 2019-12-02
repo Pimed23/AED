@@ -2,7 +2,12 @@
 #define BTREE_H
 
 #include <iostream>
+#include <vector>
+#include <queue>
 using namespace std;
+
+template <typename Type>
+struct nodo;
 
 template < typename Type >
 class BTreeNode {
@@ -26,6 +31,13 @@ class BTreeNode {
         BTreeNode<Type> *search( Type k );
 
         int findKey( Type k );
+        int getn(){return n;}
+        Type getKey(int n){
+            return keys[n];
+        }
+        bool isleaf(){
+            return leaf;
+        }
 
     private:
         Type *keys;
@@ -38,17 +50,30 @@ class BTreeNode {
         friend class BTree;
 };
 
+//estructura para obtener informacion de cada nodo y usar esta info para enlazar nodos
+template <typename Type>
+struct nodo{
+    BTreeNode<Type> *node;
+    int profundidad, indice;
+    std::string parent;
+};
+
 template < typename Type >
 class BTree {
     public:
         BTree( int t );
+        ~BTree();
 
         void traverse();
         void insert( Type k );
         void remove( Type k );
+        void clear();
 
         BTreeNode<Type>* search( Type k );
-
+        //funcion para generar toda la info de cada nodo
+        void setAllnodes(std::vector<nodo<Type>*>& v,int i, int p, std::string parent, BTreeNode<Type>*& n);
+        //funcion para generar el txt
+        void treeGraph(std::string& txt);
     private:
         BTreeNode<Type> *root;
         int t;
@@ -330,6 +355,7 @@ void BTreeNode<Type>::borrowFromNext( int idx ) {
     return;
 }
 
+
 /// METHODS CLASS BTREE
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -337,6 +363,11 @@ template < typename Type >
 BTree<Type>::BTree( int t ) {
     this -> root = NULL;
     this -> t = t;
+}
+
+template<typename Type>
+BTree<Type>::~BTree() {
+    clear();
 }
 
 template < typename Type >
@@ -396,6 +427,74 @@ void BTree<Type>::remove( Type k ) {
         delete tmp;
     }
     return;
+}
+
+template<typename Type>
+void BTree<Type>::clear(){
+    while( root != nullptr ) {
+        remove( root -> getKey( 0 ) );
+    }
+}
+
+//METHODS PARA DIBUJAR EL BTREE
+template < typename Type >
+void BTree<Type>::setAllnodes(std::vector<nodo<Type>*>& v, int newindice, int p, std::string parentstring, BTreeNode<Type>*& n){
+    std::queue<BTreeNode<Type>*> cola;
+    BTreeNode<Type>* current = n;
+    nodo<Type>* padre;
+    nodo<Type>* newnodo = new nodo<Type>;
+    newnodo->node = current;
+    newnodo->profundidad = p;
+    newnodo->indice = newindice;
+    newnodo->parent = parentstring;
+    v.push_back(newnodo);
+    int i;
+    if(!(current->isleaf())){
+        for(i=0; i< current->getn() + 1;++i){
+            cola.push( current->C[i]);
+        }
+        padre = newnodo;
+        for(int j = 0;i>0;i--, j++){
+            current = cola.front();
+            std::string childparent = to_string(padre->profundidad)+to_string(padre->indice)+padre->parent;
+            setAllnodes(v,j,padre->profundidad + 1,childparent,current);
+            cola.pop();
+        }
+    }
+}
+
+template <typename Type>
+void BTree<Type>::treeGraph(std::string& txt){
+    txt.append("Digraph btree{\n");
+    txt.append("node [shape = record,height=.1];\n");
+
+    if( root != nullptr ) {
+        std::vector<nodo<Type>*> v;
+        setAllnodes(v,0,0,"N",root);
+
+        for(size_t i=0; i<v.size() ;++i){
+            std::string nodoactualnombre = to_string(v[i]->profundidad) + to_string(v[i]->indice) + v[i]->parent ;
+            txt.append("node" + nodoactualnombre + "[label = \"");
+            int j;
+            for(j=0; j < v[i]->node->getn() ;++j){
+                txt.append("<f" + to_string(j) + "> |" + to_string(v[i]->node->getKey(j)) + "|");
+            }
+            txt.append("<f" + to_string(j) + ">\"];\n");
+
+            if(v[i]->node->isleaf() ){
+                continue;
+            }
+            else{
+                for(int k=0; k <= v[i]->node->getn() ;++k){
+                    int profundidadhijo = v[i]->profundidad + 1;
+                    std::string nodohijonombre = "node" + to_string(profundidadhijo) + to_string(k) + nodoactualnombre;
+                    txt.append("\"node"+nodoactualnombre+"\""+":f"+to_string(k)+" -> \"" + nodohijonombre + "\"\n");
+                }
+            }
+
+        }
+    }
+    txt.append("}");
 }
 
 #endif
