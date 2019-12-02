@@ -17,11 +17,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     main.cpp \
-    plooter.cpp
+    plooter.cpp \
+    utilities.cpp
 
 HEADERS += \
     BinHeap.h \
-    plooter.h
+    BinaryTree.h \
+    plooter.h \
+    utilities.h
 
 FORMS += \
     plooter.ui
